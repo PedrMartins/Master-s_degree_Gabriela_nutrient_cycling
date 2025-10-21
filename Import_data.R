@@ -8,6 +8,18 @@ names (Mestrado_Gabriela_Litter_Bags) [c(4:7)] <- c ("galho_g", "folha_g",
                                                      "perda_galho_percentage",
                                                      "perda_folha_percentage")
 
+out_folha=boxplot.stats(Mestrado_Gabriela_Litter_Bags$folha_g)
+out <- c (out$out)
+Mestrado_Gabriela_Litter_Bags_folha_s_outlier <- Mestrado_Gabriela_Litter_Bags[
+  !Mestrado_Gabriela_Litter_Bags$folha_g %in% out,
+]
+
+out_galho=boxplot.stats(Mestrado_Gabriela_Litter_Bags$galho_g)
+out <- c (out$out)
+Mestrado_Gabriela_Litter_Bags_galho_s_outlier <- Mestrado_Gabriela_Litter_Bags[
+  !Mestrado_Gabriela_Litter_Bags$galho_g %in% out,
+]
+
 
 
 ######anova one way######
@@ -38,39 +50,27 @@ names (Mestrado_Gabriela_Litter_Bags) [c(4:7)] <- c ("galho_g", "folha_g",
 
 
  anova (aov (galho_g ~ local*cor,
-             data = Mestrado_Gabriela_Litter_Bags)
+             data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier)
  )
 
  anova (aov (folha_g ~ cor*local,
-             data = Mestrado_Gabriela_Litter_Bags)
+             data = Mestrado_Gabriela_Litter_Bags_folha_s_outlier)
  )
 
 ############anova two way local tempo#############
 
 
  anova (aov (galho_g ~ local*tempo,
-             data = Mestrado_Gabriela_Litter_Bags)
+             data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier)
  )
 
 
  anova (aov (folha_g ~ local*tempo,
-             data = Mestrado_Gabriela_Litter_Bags)
+             data = Mestrado_Gabriela_Litter_Bags_folha_s_outlier)
  )
 
 
 #########################
-
-
-is.na (Mestrado_Gabriela_Litter_Bags$galho_g )
-
-
-
- par  (mfrow = c(1,2))
- boxplot (folha_g ~tempo
-          , data = Mestrado_Gabriela_Litter_Bags)
- boxplot (galho_g ~tempo
-          , data = Mestrado_Gabriela_Litter_Bags)
-
 
  cores <-  c(rep ("blue",3),
              rep ("pink",3),
@@ -87,15 +87,9 @@ is.na (Mestrado_Gabriela_Litter_Bags$galho_g )
 
 dev.off ()
 
-out=boxplot.stats(Mestrado_Gabriela_Litter_Bags$folha_g)
-out <- c (out$out)
-Mestrado_Gabriela_Litter_Bags_folha_s_outlier <- Mestrado_Gabriela_Litter_Bags[
-  !Mestrado_Gabriela_Litter_Bags$folha_g %in% out,
-]
-
-boxplot.stats(Mestrado_Gabriela_Litter_Bags$galho_g)
 
 par (mfrow = c(1,2), bty = "l")
+
 boxplot (galho_g ~ local + tempo,
          data =Mestrado_Gabriela_Litter_Bags
          , pch = "*")
@@ -106,13 +100,6 @@ boxplot (folha_g ~ local + tempo,
 range()
 
 dev.off ()
-
-Mestrado_Gabriela_Litter_Bags_folha_na_free <- Mestrado_Gabriela_Litter_Bags [!is.na(
-  Mestrado_Gabriela_Litter_Bags$folha_g),]
-is.na(Mestrado_Gabriela_Litter_Bags_folha_na_free)
-
-plot(folha_g~tempo,
-      data=Mestrado_Gabriela_Litter_Bags_folha_na_free)
 
 
 
