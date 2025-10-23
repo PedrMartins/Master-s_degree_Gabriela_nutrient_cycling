@@ -22,9 +22,12 @@ Mestrado_Gabriela_Litter_Bags_galho_s_outlier <- Mestrado_Gabriela_Litter_Bags[
   !Mestrado_Gabriela_Litter_Bags$galho_g %in% out_galho,
 ]
 
+MastersGaby_folha <- stats_bag(Mestrado_Gabriela_Litter_Bags_folha_s_outlier
+                         )
+MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
+                              part = "galho")
 
-
-
+Mestrado_Gabriela_Litter_Bags$taxa_perda_t1_t2 <-
 ######anova one way######
 
  anova (aov (galho_g ~ cor,

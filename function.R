@@ -11,25 +11,33 @@ stats_bag <- function (x, nivel = c("site", "color"), part  = "folha"){
 
     for (i in site_loc){
       site_sub <- site [site$local==i,]
-      time <- unique(site_sub$tempo)
+      parcel <- unique(site_sub$parcela)
 
-      for (j in time){
+      for (j in parcel){
 
-        site_sub_tempo <- site_sub [site_sub$tempo==j,]
-        part_data <- c (site_sub_tempo [,part_n])
-        sub_data <- site_sub_tempo %>%
-          summarise(parte= part,
-                    nivel= paste (nivel, i, sep= "_"),
-                    tempo = j,
-                    mean=mean(part_data,
-                              na.rm = TRUE ),
-                    SD=sd(part_data,
-                          na.rm = T),
-                    N=length(
-                      na.omit(part_data)
-                    )
-          )
-        data <-  rbind(sub_data, data)
+        site_sub_parcela <- site_sub [site_sub$parcela==j,]
+        time <- unique(site$tempo)
+
+        for (v in time) {
+          site_sub_parcela_tempo <- site_sub_parcela [site_sub_parcela$tempo==v,]
+          part_data <- c (site_sub_parcela_tempo [,part_n])
+          sub_data <- site_sub_parcela_tempo %>%
+            summarise(parte= part,
+                      nivel= paste (nivel, i, sep= "_"),
+                      tempo = v,
+                      parcel = j,
+                      mean=mean(part_data,
+                                na.rm = TRUE ),
+                      SD=sd(part_data,
+                            na.rm = T),
+                      N=length(
+                        na.omit(part_data)
+                      )
+            )
+          data <-  rbind(sub_data, data)
+
+        }
+
       }
 
     }
@@ -44,7 +52,6 @@ stats_bag <- function (x, nivel = c("site", "color"), part  = "folha"){
       time <- unique(site_sub$tempo)
 
       for (j in time){
-
         site_sub_tempo <- site_sub [site_sub$tempo==j,]
         part_data <- c (site_sub_tempo [,part_n])
         sub_data <- site_sub_tempo %>%
@@ -67,3 +74,4 @@ stats_bag <- function (x, nivel = c("site", "color"), part  = "folha"){
   }
   return(data)
 }
+
