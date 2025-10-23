@@ -10,15 +10,15 @@ names (Mestrado_Gabriela_Litter_Bags) [c(4:7)] <- c ("galho_g", "folha_g",
                                                      "perda_folha_percentage")
 
 out_folha=boxplot.stats(Mestrado_Gabriela_Litter_Bags$folha_g)
-out <- c (out$out)
+out_folha <- c (out_folha$out)
 Mestrado_Gabriela_Litter_Bags_folha_s_outlier <- Mestrado_Gabriela_Litter_Bags[
-  !Mestrado_Gabriela_Litter_Bags$folha_g %in% out,
+  !Mestrado_Gabriela_Litter_Bags$folha_g %in% out_folha,
 ]
 
 out_galho=boxplot.stats(Mestrado_Gabriela_Litter_Bags$galho_g)
-out <- c (out$out)
+out_galho <- c (out_galho$out)
 Mestrado_Gabriela_Litter_Bags_galho_s_outlier <- Mestrado_Gabriela_Litter_Bags[
-  !Mestrado_Gabriela_Litter_Bags$galho_g %in% out,
+  !Mestrado_Gabriela_Litter_Bags$galho_g %in% out_galho,
 ]
 
 
