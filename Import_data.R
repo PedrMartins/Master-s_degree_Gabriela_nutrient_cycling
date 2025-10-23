@@ -22,10 +22,14 @@ Mestrado_Gabriela_Litter_Bags_galho_s_outlier <- Mestrado_Gabriela_Litter_Bags[
   !Mestrado_Gabriela_Litter_Bags$galho_g %in% out_galho,
 ]
 
+Mestrado_Gabriela_Litter_Bags_galho_s_outlier_T1 <- Mestrado_Gabriela_Litter_Bags_galho_s_outlier[
+  Mestrado_Gabriela_Litter_Bags_galho_s_outlier$tempo == "T1",
+]
 MastersGaby_folha <- stats_bag(Mestrado_Gabriela_Litter_Bags_folha_s_outlier
                          )
 MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
                               part = "galho")
+
 
 Mestrado_Gabriela_Litter_Bags$taxa_perda_t1_t2 <-
 ######anova one way######
@@ -59,10 +63,10 @@ Mestrado_Gabriela_Litter_Bags$taxa_perda_t1_t2 <-
              data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier)
  )
 
- anova (aov (folha_g ~ cor*local,
-             data = Mestrado_Gabriela_Litter_Bags_folha_s_outlier)
- )
-
+ # anova (aov (folha_g ~ cor*tempo,
+ #             data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier_T1)
+ # )
+#arrumar!
 ############anova two way local tempo#############
 
 
