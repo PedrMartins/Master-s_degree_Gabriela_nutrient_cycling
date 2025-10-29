@@ -147,6 +147,8 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
              data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier)
  )
 
+
+
  anova (aov (folha_g ~ cor*local,
              data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier_T1)
  )
