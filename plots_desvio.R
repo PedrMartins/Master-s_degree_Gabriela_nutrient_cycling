@@ -82,4 +82,27 @@ ggplot(summary_df, aes(x = tempo, y = mean, fill = local)) +
   scale_fill_brewer(palette = "Set2") +
   ggsave(filename = "plot_gabys_galho_anova.jpg")
 
+all_tax_mean <- all_tax [,c(1:5)] |>
+  pivot_longer(c (t0_t1,t1_t2 ,t2_t3),names_to = "tempo",
+               values_to = "mean")
 
+all_tax_sd <- all_tax [,c(1:2,6:8)] |>
+  pivot_longer(c (t0_t1, t1_t2, t2_t3),names_to = "tempo",
+               values_to = "sd")
+
+all_tax <- full_join(all_tax_mean,all_tax_sd, join_by(local, parcela, tempo))
+View(all_tax)
+
+ggplot(all_tax, aes(x = tempo, y = mean, fill = local)) +
+  geom_bar(stat = "identity", position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd),
+                position = position_dodge(0.9), width = 0.2)
+
+
++
+  labs(title = "ANOVA: Perda de massa (%)\n por local e tempo \n Galho",
+       x = "Tempo",
+       y = "Média da porcentagem \n de perda de massa ± SE") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") +
+  ggsave(filename = "plot_gabys_galho_anova.jpg")
