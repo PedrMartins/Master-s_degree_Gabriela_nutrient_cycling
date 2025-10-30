@@ -62,28 +62,28 @@ taxa_degrad_folha$taxt2_t3 <- taxa_degrad_folha$T2 - taxa_degrad_folha$T3
 
 
 summarised_tax_t0_t1<- taxa_degrad_folha %>%
-  group_by(local, parcela) %>%
+  group_by(local, cor) %>%
   summarise(mean = mean(taxt0_t1, na.rm = TRUE),
             sd = sd(taxt0_t1,  na.rm = TRUE),
             .groups = "drop")
 
 summarised_tax_t1_t2<- taxa_degrad_folha %>%
-  group_by(local, parcela) %>%
+  group_by(local, cor) %>%
   summarise(mean = mean(taxt1_t2, na.rm = TRUE),
             sd = sd(taxt1_t2,  na.rm = TRUE),
             .groups = "drop")
 
 summarised_tax_t2_t3<- taxa_degrad_folha %>%
-  group_by(local, parcela) %>%
+  group_by(local, cor) %>%
   summarise(mean = mean(taxt2_t3, na.rm = TRUE),
             sd = sd(taxt2_t3,  na.rm = TRUE),
             .groups = "drop")
 
 all_tax <- full_join(summarised_tax_t0_t1, summarised_tax_t1_t2,
-  join_by(local, parcela))
+  join_by(local, cor))
 
 all_tax <- full_join(all_tax, summarised_tax_t2_t3,
-                     join_by(local, parcela))
+                     join_by(local, cor))
 
 all_tax <- all_tax|>
   relocate( c(sd.x,sd.y,sd), .after = mean)

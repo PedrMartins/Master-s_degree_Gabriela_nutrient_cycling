@@ -90,14 +90,22 @@ all_tax_sd <- all_tax [,c(1:2,6:8)] |>
   pivot_longer(c (t0_t1, t1_t2, t2_t3),names_to = "tempo",
                values_to = "sd")
 
-all_tax <- full_join(all_tax_mean,all_tax_sd, join_by(local, parcela, tempo))
-View(all_tax)
+all_tax_folha <- full_join(all_tax_mean,all_tax_sd, join_by(local, cor, tempo))
+View(all_tax_folha)
 
-ggplot(all_tax, aes(x = tempo, y = mean, fill = local)) +
+
+
+ggplot(all_tax_folha, aes(x = tempo, y = mean, fill = cor)) +
   geom_bar(stat = "identity", position = position_dodge(0.9)) +
   geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd),
-                position = position_dodge(0.9), width = 0.2)
+                position = position_dodge(0.9), width = 0.2) +
+  facet_wrap(~ local)
 
+ggplot(all_tax_folha, aes(x = tempo, y = mean, color = cor, group = cor)) +
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd), width = 0.15) +
+  facet_wrap(~ local)
 
 +
   labs(title = "ANOVA: Perda de massa (%)\n por local e tempo \n Galho",
