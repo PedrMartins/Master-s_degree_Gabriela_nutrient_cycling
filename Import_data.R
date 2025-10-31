@@ -2,6 +2,7 @@ library(readxl)
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
+library (multcompView)
 source("function.r")
 
 Mestrado_Gabriela_Litter_Bags <- read_excel("Mestrado Gabriela G. de Matos - Litter Bags.xlsx")
@@ -60,23 +61,36 @@ taxa_degrad_folha$taxt0_t1 <- taxa_degrad_folha$T0 - taxa_degrad_folha$T1
 taxa_degrad_folha$taxt1_t2 <- taxa_degrad_folha$T1 - taxa_degrad_folha$T2
 taxa_degrad_folha$taxt2_t3 <- taxa_degrad_folha$T2 - taxa_degrad_folha$T3
 
+colnames (taxa_degrad_folha) [8:10] <-  c("t0_t1"
+                                    ,"t1_t2",
+                                    "t2_t3")
+
+taxa_degrad_folha <- taxa_degrad_folha [,c(1:3,8:10)] |>
+  pivot_longer(c (t0_t1
+                  ,t1_t2,
+                  t2_t3),names_to = "tempo",
+               values_to = "perda")
+
 
 summarised_tax_t0_t1<- taxa_degrad_folha %>%
   group_by(local, cor) %>%
   summarise(mean = mean(taxt0_t1, na.rm = TRUE),
             sd = sd(taxt0_t1,  na.rm = TRUE),
+            se = sd(taxt1_t2,  na.rm = TRUE)/sqrt( n()),
             .groups = "drop")
 
 summarised_tax_t1_t2<- taxa_degrad_folha %>%
   group_by(local, cor) %>%
   summarise(mean = mean(taxt1_t2, na.rm = TRUE),
             sd = sd(taxt1_t2,  na.rm = TRUE),
+            se = sd(taxt1_t2,  na.rm = TRUE)/sqrt( n()),
             .groups = "drop")
 
 summarised_tax_t2_t3<- taxa_degrad_folha %>%
   group_by(local, cor) %>%
   summarise(mean = mean(taxt2_t3, na.rm = TRUE),
             sd = sd(taxt2_t3,  na.rm = TRUE),
+            se = sd(taxt1_t2,  na.rm = TRUE)/sqrt( n()),
             .groups = "drop")
 
 all_tax <- full_join(summarised_tax_t0_t1, summarised_tax_t1_t2,
@@ -86,13 +100,17 @@ all_tax <- full_join(all_tax, summarised_tax_t2_t3,
                      join_by(local, cor))
 
 all_tax <- all_tax|>
-  relocate( c(sd.x,sd.y,sd), .after = mean)
+  relocate( c(sd.x,sd.y,sd), .after = mean) |>
+  relocate (c(se.x,se.y,se), .after=sd)
 
-names (all_tax) [3:8] <- c("t0_t1"
+names (all_tax) [3:11] <- c("t0_t1"
                          ,"t1_t2",
                          "t2_t3",
                          "t0_t1",
                          "t1_t2",
+                         "t2_t3",
+                         "t0_t1"
+                         ,"t1_t2",
                          "t2_t3")
 
 # Mestrado_Gabriela_Litter_Bags_galho_s_outlier_T1 <- Mestrado_Gabriela_Litter_Bags_galho_s_outlier[
@@ -144,14 +162,25 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
 
 
  anova (aov (galho_g ~ tempo*cor,
-             data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier)
+             data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier_clean)
  )
 
 
 
- anova (aov (folha_g ~ cor*local,
-             data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier_T1)
- )
+  anova_fola_cor_tempo <- aov (perda ~  cor*tempo*local,
+             data = taxa_degrad_folha)
+
+  tukey_fola_cor_tempo <- TukeyHSD(aov (perda ~ cor*tempo*local,
+                                        data = taxa_degrad_folha))
+
+  letters <- multcompLetters4(anova_fola_cor_tempo, tukey_fola_cor_tempo)
+
+  letters <- as.data.frame.list(letters$`cor:local`)
+
+  letters$cor_tempo <- rownames(letters)
+
+  colnames(letters) [c(1:2,5)] <- c("group", "tempo", "loc_temp")
+
 
  anova (aov (folha_g ~ cor*local,
              data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier_T2)
