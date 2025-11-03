@@ -46,6 +46,10 @@ taxa_degrad_galho$taxt0_t1 <- taxa_degrad_galho$T0 - taxa_degrad_galho$T1
 taxa_degrad_galho$taxt1_t2 <- taxa_degrad_galho$T1 - taxa_degrad_galho$T2
 taxa_degrad_galho$taxt2_t3 <- taxa_degrad_galho$T2 - taxa_degrad_galho$T3
 
+colnames (taxa_degrad_galho) [8:10] <-  c("t0_t1"
+                                          ,"t1_t2",
+                                          "t2_t3")
+
 
 ## folha
 taxa_degrad_folha <- pivot_wider(Mestrado_Gabriela_Litter_Bags_folha_s_outlier_clean,
@@ -161,16 +165,19 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
 ######anova two way local cor####
 
 
- anova (aov (galho_g ~ tempo*cor,
+ anova_galho_cor_tempo <- anova (aov (galho_g ~ tempo*cor*local,
              data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier_clean)
  )
 
+ tukey_galho_cor_tempo <- TukeyHSD(aov (perda ~ cor*tempo*local,
+                                       data = taxa_degrad_folha))
 
 
-  anova_fola_cor_tempo <- aov (perda ~  cor*tempo*local,
+
+  anova_folha_cor_tempo <- aov (perda ~  cor*tempo*local,
              data = taxa_degrad_folha)
 
-  tukey_fola_cor_tempo <- TukeyHSD(aov (perda ~ cor*tempo*local,
+  tukey_folha_cor_tempo <- TukeyHSD(aov (perda ~ cor*tempo*local,
                                         data = taxa_degrad_folha))
 
   letters <- multcompLetters4(anova_fola_cor_tempo, tukey_fola_cor_tempo)
@@ -182,15 +189,7 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
   colnames(letters) [c(1:2,5)] <- c("group", "tempo", "loc_temp")
 
 
- anova (aov (folha_g ~ cor*local,
-             data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier_T2)
- )
 
- anova (aov (folha_g ~ cor*local,
-             data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier_T3)
- )
-
-#arrumar!
 ############anova two way local tempo#############
 
 
