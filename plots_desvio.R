@@ -74,12 +74,12 @@ all_tax_sd <- all_tax_folha [,c(1:2,9:11)] |>
 
 
 all_tax_folha <- full_join(all_tax_mean,all_tax_sd, join_by(local, cor, tempo))
-all_tax_folha$loc_temp <- paste (
+all_tax_folha$cor_temp <- paste (
                                  all_tax_folha$cor,
-                                 all_tax_folha$local,
+                                 all_tax_folha$tempo,
                                  sep = ":")
-all_tax_folha <- merge(all_tax_folha, letters, by = "loc_temp")
-all_tax_folha <- all_tax_folha [,-c(8:10)]
+all_tax_folha <- merge(all_tax_folha, letters, by = "cor_temp")
+all_tax_folha <- all_tax_folha [,-8]
 colnames(all_tax_folha) [4] <- "tempo"
 
 
@@ -87,15 +87,25 @@ ggplot(all_tax_folha, aes(x = tempo, y = mean, fill = cor)) +
   geom_bar(stat = "identity", position = position_dodge(0.9)) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
                 position = position_dodge(0.9), width = 0.2) +
-  facet_wrap(~ local)
-
+  geom_text(aes (label = group, y = mean + se + 0.5),
+            position = position_dodge(0.9)) +
+  facet_wrap(~ local) +
+  ggsave(filename = "plot_folhas_anova_tukey.jpg")
 
 
 ggplot(all_tax_folha, aes(x = tempo, y = mean, fill = local)) +
   geom_bar(stat = "identity", position = position_dodge(0.9)) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
                 position = position_dodge(0.9), width = 0.2) +
-  facet_wrap(~ cor)
+  geom_text(aes (label = group, y = mean + se + 0.5),
+            position = position_dodge(0.9)) +
+  facet_wrap(~ cor) +
+  theme(
+    legend.position = "bottom")+
+  ggsave(filename = "plot_folhas_anova_tukey_cor.jpg",
+         width =2700,
+         height = 1300,
+         units = "px")
 
 
 
@@ -136,24 +146,37 @@ ggplot(all_tax_folha, aes(x = tempo, y = mean, fill = local)) +
 
   all_tax_galho <- full_join(all_tax_mean,all_tax_se,
                              join_by(local, cor, tempo))
-  all_tax_galho$loc_cor <- paste (
-    all_tax_galho$local,
+  all_tax_galho$cor_temp <- paste (
+    all_tax_galho$tempo,
     all_tax_galho$cor,
     sep = ":")
-  all_tax_galho <- merge(all_tax_galho, letters_galho, by = "loc_cor")
+  all_tax_galho <- merge(all_tax_galho, letters_galho, by = "cor_temp")
+  names (all_tax_galho) [4] <-  "tempo"
+
 
 
   ggplot(all_tax_galho, aes(x = tempo, y = mean, fill = cor)) +
-    geom_bar(stat = "identity", position = position_dodge(0.9)) +
-    facet_wrap(~ local) +
+    geom_bar(stat = "identity", position = position_dodge(0.9))  +
     geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
-                  position = position_dodge(0.9), width = 0.2)
+                  position = position_dodge(0.9), width = 0.2)+
+    geom_text(aes (label = group, y = mean + se + 0.5),
+              position = position_dodge(0.9)) +
+    facet_wrap(~ local)+
+    ggsave(filename = "plot_galhos_anova_tukey.jpg")
 
 
   ggplot(all_tax_galho, aes(x = tempo, y = mean, fill = local)) +
-    geom_bar(stat = "identity", position = position_dodge(0.9)) +
-    facet_wrap(~ cor) +
+    geom_bar(stat = "identity", position = position_dodge(0.9))  +
     geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
-                  position = position_dodge(0.9), width = 0.2)
+                  position = position_dodge(0.9), width = 0.2)+
+    geom_text(aes (label = group, y = mean + se + 0.5),
+              position = position_dodge(0.9)) +
+    facet_wrap(~ cor) +
+    theme(
+      legend.position = "bottom")+
+    ggsave(filename = "plot_galhos_anova_tukey_cor.jpg",
+           width =2700,
+           height = 1300,
+           units = "px")
 
 

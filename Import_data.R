@@ -1,9 +1,4 @@
-library(readxl)
-library(ggplot2)
-library(dplyr)
-library(tidyverse)
-library (multcompView)
-source("function.r")
+source ("load.R")
 
 Mestrado_Gabriela_Litter_Bags <- read_excel("Mestrado Gabriela G. de Matos - Litter Bags.xlsx")
 Mestrado_Gabriela_Litter_Bags <- Mestrado_Gabriela_Litter_Bags [,-c(9:11)]
@@ -194,20 +189,24 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
 
 ######anova two way local cor####
 
-####galhor####
- anova_galho_cor_tempo <- aov (perda ~ local*cor,
+####galho####
+ anova_galho_cor_tempo <- aov (perda ~ tempo*cor,
              data = taxa_degrad_galho)
 
 
- tukey_galho_cor_tempo <- TukeyHSD(aov (perda ~ local*cor,
+ tukey_galho_cor_tempo <- TukeyHSD(aov (perda ~ tempo*cor,
                                        data = taxa_degrad_galho))
 
  letters_galho <- multcompLetters4(anova_galho_cor_tempo,
                              tukey_galho_cor_tempo)
 
- letters_galho <- as.data.frame.list(letters_galho$`local:cor`)
+ letters_galho <- as.data.frame.list(letters_galho$`tempo:cor`)
 
- letters_galho$loc_cor <- rownames(letters_galho)
+ letters_galho$cor_tempo <- rownames(letters_galho)
+
+ letters_galho <-  letters_galho [,-c(3:6)]
+
+ colnames(letters_galho)  <- c("group", "tempo", "cor_temp")
 
 
 #####folha #####
@@ -221,25 +220,14 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
   letters <- multcompLetters4(anova_folha_cor_tempo,
                               tukey_folha_cor_tempo)
 
-  letters <- as.data.frame.list(letters$`cor:local`)
+  letters <- as.data.frame.list(letters$`cor:tempo`)
 
   letters$cor_tempo <- rownames(letters)
 
-  colnames(letters) [c(1:2,5)] <- c("group", "tempo", "loc_temp")
+  colnames(letters)  <- c("group", "tempo", "cor_temp")
 
 
 
-############anova two way local tempo#############
-
-
- anova (aov (galho_g ~ local*tempo,
-             data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier)
- )
-
-
- anova (aov (folha_g ~ local*tempo,
-             data = Mestrado_Gabriela_Litter_Bags_folha_s_outlier)
- )
 
 
 #########################
