@@ -15,14 +15,14 @@ out_folha <- c (out_folha$out)
 Mestrado_Gabriela_Litter_Bags_folha_s_outlier <- Mestrado_Gabriela_Litter_Bags[
   !Mestrado_Gabriela_Litter_Bags$folha_g %in% out_folha,
 ]
-Mestrado_Gabriela_Litter_Bags_folha_s_outlier_clean <- Mestrado_Gabriela_Litter_Bags_folha_s_outlier [, -c(4,6,7)]
+
 
 out_galho=boxplot.stats(Mestrado_Gabriela_Litter_Bags$galho_g)
 out_galho <- c (out_galho$out)
 Mestrado_Gabriela_Litter_Bags_galho_s_outlier <- Mestrado_Gabriela_Litter_Bags[
   !Mestrado_Gabriela_Litter_Bags$galho_g %in% out_galho,
 ]
-Mestrado_Gabriela_Litter_Bags_galho_s_outlier_clean <- Mestrado_Gabriela_Litter_Bags_galho_s_outlier [, -c(5:7)]
+
 
 
 ############Tidy tabela##########
@@ -190,26 +190,48 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
 ######anova two way local cor####
 
 ####galho####
- anova_galho_cor_tempo <- aov (perda ~ tempo*cor,
+#####by_taxa t0_t1 t1_t2 ...#####
+ anova_galho_cor_tempo <- aov (perda ~ local*cor,
              data = taxa_degrad_galho)
 
 
- tukey_galho_cor_tempo <- TukeyHSD(aov (perda ~ tempo*cor,
+ tukey_galho_cor_tempo <- TukeyHSD(aov (perda ~ local*cor,
                                        data = taxa_degrad_galho))
 
  letters_galho <- multcompLetters4(anova_galho_cor_tempo,
                              tukey_galho_cor_tempo)
 
- letters_galho <- as.data.frame.list(letters_galho$`tempo:cor`)
+ letters_galho <- as.data.frame.list(letters_galho$`local:cor`)
 
- letters_galho$cor_tempo <- rownames(letters_galho)
+ letters_galho$local_cor <- rownames(letters_galho)
 
  letters_galho <-  letters_galho [,-c(3:6)]
 
- colnames(letters_galho)  <- c("group", "tempo", "cor_temp")
+ colnames(letters_galho)  <- c("group", "tempo", "local_cor")
 
+ #####by_taxa t0_tx ...#####
+
+ anova_galho_cor_tempo <- aov (perda_galho_percentage  ~ (local+cor)*tempo,
+                               data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier)
+
+
+
+ tukey_galho_cor_tempo <- TukeyHSD(aov (perda_galho_percentage ~ (local+cor)*tempo,
+                                        data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier))
+
+ letters_galho <- multcompLetters4(anova_galho_cor_tempo,
+                                   tukey_galho_cor_tempo)
+
+ letters_galho <- as.data.frame.list(letters_galho$`local:cor`)
+
+ letters_galho$local_cor <- rownames(letters_galho)
+
+ letters_galho <-  letters_galho [,-c(3:6)]
+
+ colnames(letters_galho)  <- c("group", "tempo", "local_cor")
 
 #####folha #####
+ #####by_taxa t0_t1 t1_t2 ...#####
 
   anova_folha_cor_tempo <- aov (perda ~  cor*tempo,
              data = taxa_degrad_folha)
@@ -226,6 +248,26 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
 
   colnames(letters)  <- c("group", "tempo", "cor_temp")
 
+  #####by_taxa t0_tx ...#####
+
+  anova_folha_cor_tempo <- aov (perda_galho_percentage  ~ (local+cor)*tempo,
+                                data = Mestrado_Gabriela_Litter_Bags_folha_s_outlier)
+
+
+
+  tukey_folha_cor_tempo <- TukeyHSD(aov (perda_galho_percentage ~ (local+cor)*tempo,
+                                         data = Mestrado_Gabriela_Litter_Bags_folha_s_outlier))
+
+  letters_folha <- multcompLetters4(anova_folha_cor_tempo,
+                                    tukey_folha_cor_tempo)
+
+  letters_folha <- as.data.frame.list(letters_folha$`local:cor`)
+
+  letters_folha$local_cor <- rownames(letters_folha)
+
+  letters_folha <-  letters_folha [,-c(3:6)]
+
+  colnames(letters_folha)  <- c("group", "tempo", "local_cor")
 
 
 

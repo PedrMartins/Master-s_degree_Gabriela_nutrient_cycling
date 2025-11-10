@@ -1,7 +1,7 @@
 
 ######ggplot #######
 
-ggplot(MastersGaby_folha, aes(x = tempo, y = mean, fill = nivel)) +
+ggplot(Mestrado_Gabriela_Litter_Bags_folha_s_outlier_clean, aes(x = tempo, y = mean, fill = nivel)) +
   geom_bar(stat = "identity", position = position_dodge(0.9)) +
   geom_errorbar(aes(ymin = mean - SD, ymax = mean + SD),
                 width = 0.2, position = position_dodge(0.9)) +
@@ -146,11 +146,11 @@ ggplot(all_tax_folha, aes(x = tempo, y = mean, fill = local)) +
 
   all_tax_galho <- full_join(all_tax_mean,all_tax_se,
                              join_by(local, cor, tempo))
-  all_tax_galho$cor_temp <- paste (
-    all_tax_galho$tempo,
+  all_tax_galho$local_cor <- paste (
+    all_tax_galho$local,
     all_tax_galho$cor,
     sep = ":")
-  all_tax_galho <- merge(all_tax_galho, letters_galho, by = "cor_temp")
+  all_tax_galho <- merge(all_tax_galho, letters_galho, by = "local_cor")
   names (all_tax_galho) [4] <-  "tempo"
 
 
