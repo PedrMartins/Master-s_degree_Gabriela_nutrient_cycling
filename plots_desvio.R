@@ -45,6 +45,7 @@ points(1:length(means), means, pch = 19, col = "red")
 ######Anova plot########
 
 ####folha####
+####folha_taxa####
 
 # summary_df <- Mestrado_Gabriela_Litter_Bags_folha_s_outlier %>%
 #   group_by(local, tempo) %>%
@@ -107,6 +108,16 @@ ggplot(all_tax_folha, aes(x = tempo, y = mean, fill = local)) +
          height = 1300,
          units = "px")
 
+####folha_taxa_t0_tx####
+
+ggplot(summarised_folha, aes(x = tempo, y = mean, fill = cor)) +
+  geom_bar(stat = "identity", position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
+                position = position_dodge(0.9), width = 0.2) +
+  geom_text(aes (label = Letters, y = mean - se - 3.5),
+            position = position_dodge(0.9)) +
+  facet_wrap(~ local) +
+  ggsave(filename = ".jpg")
 
 
 
@@ -178,5 +189,21 @@ ggplot(all_tax_folha, aes(x = tempo, y = mean, fill = local)) +
            width =2700,
            height = 1300,
            units = "px")
+
+  ####galho_taxa_t0_tx####
+
+  ggplot(summarised_galho, aes(x = tempo, y = mean, fill = cor)) +
+    geom_bar(stat = "identity", position = position_dodge(0.9)) +
+    geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
+                  position = position_dodge(0.9), width = 0.2) +
+    geom_text(aes (label = Letters, y = mean - se - 3.5),
+              position = position_dodge(0.9)) +
+    facet_wrap(~ local)
+
+  +
+    ggsave(filename = ".jpg")
+
+
+
 
 

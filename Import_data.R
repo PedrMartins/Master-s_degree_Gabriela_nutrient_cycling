@@ -29,7 +29,7 @@ Mestrado_Gabriela_Litter_Bags_galho_s_outlier <- Mestrado_Gabriela_Litter_Bags[
 
 
 ####galho####
-taxa_degrad_galho <- pivot_wider(Mestrado_Gabriela_Litter_Bags_galho_s_outlier_clean,
+taxa_degrad_galho <- pivot_wider(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
                                  names_from = c(tempo),
                                  values_from =  galho_g)
 taxa_degrad_galho$T0 <- rep(10, length(taxa_degrad_galho$local))
@@ -46,7 +46,7 @@ summarised_tax_t0_t1<- taxa_degrad_galho %>%
   group_by(local, cor) %>%
   summarise(mean = mean(taxt0_t1, na.rm = TRUE),
             sd = sd(taxt0_t1,  na.rm = TRUE),
-            se = sd(taxt1_t2,  na.rm = TRUE)/sqrt( n()),
+            se = sd(taxt0_t1,  na.rm = TRUE)/sqrt( n()),
             .groups = "drop")
 
 summarised_tax_t1_t2<- taxa_degrad_galho %>%
@@ -60,7 +60,7 @@ summarised_tax_t2_t3<- taxa_degrad_galho %>%
   group_by(local, cor) %>%
   summarise(mean = mean(taxt2_t3, na.rm = TRUE),
             sd = sd(taxt2_t3,  na.rm = TRUE),
-            se = sd(taxt1_t2,  na.rm = TRUE)/sqrt( n()),
+            se = sd(taxt2_t3,  na.rm = TRUE)/sqrt( n()),
             .groups = "drop")
 
 all_tax <- full_join(summarised_tax_t0_t1, summarised_tax_t1_t2,
@@ -100,7 +100,7 @@ taxa_degrad_galho <- taxa_degrad_galho [,c(1:3,8:10)] |>
 
 
 ##### folha#####
-taxa_degrad_folha <- pivot_wider(Mestrado_Gabriela_Litter_Bags_folha_s_outlier_clean,
+taxa_degrad_folha <- pivot_wider(Mestrado_Gabriela_Litter_Bags_folha_s_outlier,
                                  names_from = c ( tempo),
                                  values_from =  folha_g)
 
@@ -118,7 +118,7 @@ summarised_tax_t0_t1<- taxa_degrad_folha %>%
   group_by(local, cor) %>%
   summarise(mean = mean(taxt0_t1, na.rm = TRUE),
             sd = sd(taxt0_t1,  na.rm = TRUE),
-            se = sd(taxt1_t2,  na.rm = TRUE)/sqrt( n()),
+            se = sd(taxt0_t1,  na.rm = TRUE)/sqrt( n()),
             .groups = "drop")
 
 summarised_tax_t1_t2<- taxa_degrad_folha %>%
@@ -132,7 +132,7 @@ summarised_tax_t2_t3<- taxa_degrad_folha %>%
   group_by(local, cor) %>%
   summarise(mean = mean(taxt2_t3, na.rm = TRUE),
             sd = sd(taxt2_t3,  na.rm = TRUE),
-            se = sd(taxt1_t2,  na.rm = TRUE)/sqrt( n()),
+            se = sd(taxt2_t3,  na.rm = TRUE)/sqrt( n()),
             .groups = "drop")
 
 all_tax_folha <- full_join(summarised_tax_t0_t1, summarised_tax_t1_t2,
@@ -222,13 +222,21 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
  letters_galho <- multcompLetters4(anova_galho_cor_tempo,
                                    tukey_galho_cor_tempo)
 
- letters_galho <- as.data.frame.list(letters_galho$`local:cor`)
 
- letters_galho$local_cor <- rownames(letters_galho)
+ summarised_galho<- Mestrado_Gabriela_Litter_Bags_galho_s_outlier %>%
+   group_by(tempo, local, cor) %>%
+   summarise(mean = mean(perda_galho_percentage, na.rm = TRUE),
+             sd = sd(perda_galho_percentage,  na.rm = TRUE),
+             se = sd(perda_galho_percentage,  na.rm = TRUE)/sqrt( n()),
+             .groups = "drop")
 
- letters_galho <-  letters_galho [,-c(3:6)]
+ letters_galho <- as.data.frame.list(letters_galho$`cor`)
 
- colnames(letters_galho)  <- c("group", "tempo", "local_cor")
+ letters_galho$cor <- rownames(letters_galho)
+
+ summarised_galho <- merge(summarised_galho, letters_galho, by = "cor")
+
+
 
 #####folha #####
  #####by_taxa t0_t1 t1_t2 ...#####
@@ -261,13 +269,19 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
   letters_folha <- multcompLetters4(anova_folha_cor_tempo,
                                     tukey_folha_cor_tempo)
 
-  letters_folha <- as.data.frame.list(letters_folha$`local:cor`)
+  summarised_folha<- Mestrado_Gabriela_Litter_Bags_folha_s_outlier %>%
+  group_by(tempo, local, cor) %>%
+  summarise(mean = mean(perda_folha_percentage, na.rm = TRUE),
+            sd = sd(perda_folha_percentage,  na.rm = TRUE),
+            se = sd(perda_folha_percentage,  na.rm = TRUE)/sqrt( n()),
+            .groups = "drop")
 
-  letters_folha$local_cor <- rownames(letters_folha)
+  letters_folha <- as.data.frame.list(letters_folha$`cor`)
 
-  letters_folha <-  letters_folha [,-c(3:6)]
+  letters_folha$cor <- rownames(letters_folha)
 
-  colnames(letters_folha)  <- c("group", "tempo", "local_cor")
+  summarised_folha <- merge(summarised_folha, letters_folha, by = "cor")
+
 
 
 
