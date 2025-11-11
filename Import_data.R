@@ -210,21 +210,22 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
  colnames(letters_galho)  <- c("group", "tempo", "local_cor")
 
  #####by_taxa t0_tx ...#####
+   Mestrado_Gabriela_Litter_Bags_galho_s_outlier$parcela_local <- paste (Mestrado_Gabriela_Litter_Bags_galho_s_outlier$local,
+                                                                         Mestrado_Gabriela_Litter_Bags_galho_s_outlier$parcela)
 
- anova_galho_cor_tempo <- aov (perda_galho_percentage  ~ (local+cor)*tempo,
+ anova_galho_cor_tempo <- aov (perda_galho_percentage  ~ parcela*tempo,
                                data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier)
 
 
 
- tukey_galho_cor_tempo <- TukeyHSD(aov (perda_galho_percentage ~ (local+cor)*tempo,
-                                        data = Mestrado_Gabriela_Litter_Bags_galho_s_outlier))
+ tukey_galho_cor_tempo <- TukeyHSD(anova_galho_cor_tempo)
 
  letters_galho <- multcompLetters4(anova_galho_cor_tempo,
                                    tukey_galho_cor_tempo)
 
 
  summarised_galho<- Mestrado_Gabriela_Litter_Bags_galho_s_outlier %>%
-   group_by(tempo, local, cor) %>%
+   group_by(tempo, local) %>%
    summarise(mean = mean(perda_galho_percentage, na.rm = TRUE),
              sd = sd(perda_galho_percentage,  na.rm = TRUE),
              se = sd(perda_galho_percentage,  na.rm = TRUE)/sqrt( n()),
