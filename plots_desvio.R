@@ -117,7 +117,7 @@ ggplot(summarised_folha, aes(x = tempo, y = mean, fill = cor)) +
   geom_text(aes (label = Letters, y = mean - se - 3.5),
             position = position_dodge(0.9)) +
   facet_wrap(~ local) +
-  ggsave(filename = ".jpg")
+  ggsave(filename = "cumulativo_perda_folha_cor.jpg")
 
 
 
@@ -198,10 +198,8 @@ ggplot(summarised_folha, aes(x = tempo, y = mean, fill = cor)) +
                   position = position_dodge(0.9), width = 0.2) +
     geom_text(aes (label = Letters, y = mean - se - 3.5),
               position = position_dodge(0.9)) +
-    facet_wrap(~ local)
-
-  +
-    ggsave(filename = ".jpg")
+    facet_wrap(~ local) +
+    ggsave(filename = "cumulativo_perda_galho_cor.jpg")
 
 
 

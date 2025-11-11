@@ -258,12 +258,12 @@ MastersGaby_galho <- stats_bag(Mestrado_Gabriela_Litter_Bags_galho_s_outlier,
 
   #####by_taxa t0_tx ...#####
 
-  anova_folha_cor_tempo <- aov (perda_galho_percentage  ~ (local+cor)*tempo,
+  anova_folha_cor_tempo <- aov (perda_folha_percentage  ~ (local+cor)*tempo,
                                 data = Mestrado_Gabriela_Litter_Bags_folha_s_outlier)
 
 
 
-  tukey_folha_cor_tempo <- TukeyHSD(aov (perda_galho_percentage ~ (local+cor)*tempo,
+  tukey_folha_cor_tempo <- TukeyHSD(aov (perda_folha_percentage ~ (local+cor)*tempo,
                                          data = Mestrado_Gabriela_Litter_Bags_folha_s_outlier))
 
   letters_folha <- multcompLetters4(anova_folha_cor_tempo,
